@@ -11,25 +11,25 @@
             <work_app item = "BID,RTO,PDS,SOS,SSR"/>
             <work_module item = ''/>
             <work_gl_app item = ''/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'DIS,JDC,MQT,RTO,SOS,TLS,UPC,UPD'/>
         </developer>
         <developer name_en = 'Aleo Liu' name_cn = '刘洋洋'>
             <work_app item = "FFC,FRI,EMG,CRA,ASC,HBM,RAS,RCS,GNA"/>
             <work_module item = 'GPS,PROT'/>
             <work_gl_app item = ''/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'BLECAN,CAN,CFU,LED'/>
         </developer>
         <developer name_en = 'Harper Kuang' name_cn = '匡婷'>
             <work_app item = "FFC,FRI,EMG,CRA,ASC,HBM,RAS,RCS,GNA"/>
             <work_module item = ''/>
             <work_gl_app item = ''/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'BLEPIN,RELAY'/>
         </developer>
         <developer name_en = 'Rain Wu' name_cn = '吴瑞'>
             <work_app item = "DTT,MON,RMD,DAT,TKS,UDT"/>
             <work_module item = ''/>
             <work_gl_app item = ''/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'DOG,GTC,OSPD,SSR,TOF,TOW'/>
         </developer>
         <developer name_en = 'Vincent Cui' name_cn = '崔子晨'>
             <work_app item = "IDA,CDA,GEO,PEO,PEG,GAM,FKS,NMD"/>
@@ -41,13 +41,13 @@
             <work_app item = "DIS,IOB,OUT,DOS,GDO,ACD,IEX,OEX,TMP,HUM,SLM"/>
             <work_module item = 'IO'/>
             <work_gl_app item = 'GEO,JDC,TEM,FRI,UPC,UPD,FVR'/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'BLEID,IDA,IDS,TPM'/>
         </developer>
         <developer name_en = 'Haze Zhang' name_cn = '张仲俊'>
             <work_app item = "SPA,BZA,DUC,CMD,UDF,AUS"/>
             <work_module item = ''/>
             <work_gl_app item = ''/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'ASC,CRA,HBM,HMC,IDL,ODO,VCD'/>
         </developer>
         <developer name_en = 'Allen Zhang' name_cn = '张学忠'>
             <work_app item = "BSI,QSS,SRI,FVR,UPC,UPD,MDT"/>
@@ -59,7 +59,7 @@
             <work_app item = "MQT,AVS,VVS,VMS,SMS,OWL,LTP,TLS"/>
             <work_module item = ''/>
             <work_gl_app item = 'BSI,QSS,SRI,MQT,TLS,LTP,RTP'/>
-            <work_pro_app item = ''/>
+            <work_pro_app item = 'ACK,AGPS,AOL,APF,APN,APN2,BPL,BSS,BSS2,BTADV,BTBCN,BTKFB,BTSVR,CFG,CMD,DMS,EPS,GAM,GEO,GMC,GML,GMS,GSENSOR,HBD,NET,OWH,PIN,PPS,PROFILE,PWL,QRC,QSS,RDF,RPS,SMS,TMA,UDF'/>
         </developer>
         <developer name_en = 'Bear Cao' name_cn = '曹政'>
             <work_app item = "HMC,HRM,CDS,MSI,MSF"/>
