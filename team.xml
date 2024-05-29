@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<team version="1">
+<team version="1.0">
     <application>
         <developer name_en = 'Len Liu' name_cn = '刘信'>
             <work_app item = "AIS,EPS,EFS,FSC,UFS,JDC,JBS"/>

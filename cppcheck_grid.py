@@ -32,7 +32,24 @@ class Member:
         self.name_cn = ''
         self.work_modules = []
         self.work_apps = []
+        self.work_gl_apps = []
+        self.work_pro_apps = []
         self.cr_result = []
+
+
+def parse_work(m, node):
+    for subNode in node.childNodes:
+        if CR_ELEMENT_NODE == subNode.nodeType:
+            if 'work_app' == subNode.nodeName:
+                m.work_apps = subNode.getAttribute('item').split(',')
+            elif 'work_module' == subNode.nodeName:
+                m.work_modules = subNode.getAttribute('item').split(',')
+            elif 'work_gl_app' == subNode.nodeName:
+                m.work_gl_apps = subNode.getAttribute('item').split(',')
+            elif 'work_pro_app' == subNode.nodeName:
+                m.work_pro_apps = subNode.getAttribute('item').split(',')
+            else:
+                print("UNKNOWN node type: " + subNode.nodeName)
 
 
 class Team:
@@ -126,61 +143,51 @@ class Team:
 
         return 0
 
+    def parse_developer(self, node):
+        for subNode in node.childNodes:
+            if CR_ELEMENT_NODE == subNode.nodeType:
+                if 'developer' == subNode.nodeName:
+                    m = Member()
+                    m.name_en = subNode.getAttribute('name_en')
+                    m.name_cn = subNode.getAttribute('name_cn')
+                    parse_work(m, subNode)
+                    self.members.append(m)
+
+    def print_members(self):
+        for mb in self.members:
+            print(mb.name_cn)
+            print(mb.name_en)
+            print(mb.work_apps)
+            print(mb.work_modules)
+            print(mb.work_gl_apps)
+            print(mb.work_pro_apps)
+
     def init_members(self):
-        for wk in self.work_arrange:
-            m = Member()
-            m.name_en = wk['name_en']
-            m.name_cn = wk['name_cn']
-            m.work_apps = wk['work_app'].split(',')
-            m.work_modules = wk['work_module'].split(',')
-            m.work_gl_apps = wk['work_gl_app'].split(',')
-            self.members.append(m)
+        file = "team.xml"
+        try:
+            dom = xml.dom.minidom.parse(file)
+        except DOMException:
+            raise Exception(file + ' is NOT a well-formed XML file.')
+
+        root = dom.documentElement
+
+        if root.nodeName != 'team':
+            raise Exception('XML has no \'Team\' element.')
+
+        # Get attributes of results
+        results_ver = root.getAttribute('version')
+        print(results_ver)
+
+        for node in root.childNodes:
+            if CR_ELEMENT_NODE == node.nodeType:  # 1 is Element
+                if 'application' == node.nodeName or 'system' == node.nodeName:
+                    self.parse_developer(node)
 
     def __init__(self):
         self.members = []
-        self.work_arrange = [
-            {'name_en': "Len Liu", "name_cn": "刘信", 'work_app': 'AIS,EPS,EFS,FSC,UFS,JDC,JBS', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Claire Liu", "name_cn": "刘慧", 'work_app': 'BID,RTO,PDS,SOS,SSR', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Aleo Liu", "name_cn": "刘洋洋", 'work_app': 'FFC,FRI,EMG,CRA,ASC,HBM,RAS,RCS,GNA',
-             'work_module': 'GPS,PROT', 'work_gl_app': ''},
-            {'name_en': "Harper Kuang", "name_cn": "匡婷", 'work_app': 'SIM,SPD,TOW,OWH,PIN,TMA,WLT',
-             'work_module': '', 'work_gl_app': ''},
-            {'name_en': "Rain Wu", "name_cn": "吴瑞", 'work_app': 'DTT,MON,RMD,DAT,TKS,UDT', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Vincent Cui", "name_cn": "崔子晨", 'work_app': 'IDA,CDA,GEO,PEO,PEG,GAM,FKS,NMD',
-             'work_module': '', 'work_gl_app': 'CFG,NMD,DOG,TMA,SFM,FKS,EMS,RDF'},
-            {'name_en': "Bennett Cui", "name_cn": "崔斌", 'work_app': 'DIS,IOB,OUT,DOS,GDO,ACD,IEX,OEX,TMP,HUM,SLM',
-             'work_module': 'IO', 'work_gl_app': 'GEO,JDC,TEM,FRI,UPC,UPD,FVR'},
-            {'name_en': "Haze Zhang", "name_cn": "张仲俊", 'work_app': 'SPA,BZA,DUC,CMD,UDF,AUS', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Allen Zhang", "name_cn": "张学忠", 'work_app': 'BSI,QSS,SRI,FVR,UPC,UPD,MDT',
-             'work_module': '', 'work_gl_app': ''},
-            {'name_en': "Abert Xu", "name_cn": "徐黎明", 'work_app': 'MQT,AVS,VVS,VMS,SMS,OWL,LTP,TLS',
-             'work_module': '', 'work_gl_app': 'BSI,QSS,SRI,MQT,TLS,LTP,RTP'},
-            {'name_en': "Bear Cao", "name_cn": "曹政", 'work_app': 'HMC,HRM,CDS,MSI,MSF', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Archie Li", "name_cn": "李叶齐", 'work_app': 'BTS,ROS,BAS,AEX,SVR', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Arthur Lee", "name_cn": "李永乐", 'work_app': '', 'work_module': '', 'work_gl_app': ''},
-            {'name_en': "Jack Li", "name_cn": "李仁杰", 'work_app': '', 'work_module': '', 'work_gl_app': ''},
-            {'name_en': "Elvin Shen", "name_cn": "沈子扬", 'work_app': 'CAN,CFU,TTR,CLT,AES,MQT',
-             'work_module': 'COMM,SERIAL', 'work_gl_app': ''},
-            {'name_en': "Ying Xiong", "name_cn": "熊鹰", 'work_app': 'CFG,CMS,TAP', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Ernie Hu", "name_cn": "胡心月", 'work_app': '', 'work_module': '', 'work_gl_app': ''},
-            {'name_en': "Todd Zheng", "name_cn": "郑功良", 'work_app': 'DMS,DOG,FTP,FSC,FSI,FSS,PMS', 'work_module': '',
-             'work_gl_app': ''},
-            {'name_en': "Noah Qin", "name_cn": "秦伟", 'work_app': '', 'work_module': 'ATCI,SENSOR', 'work_gl_app': ''},
-            {'name_en': "Swain Shen", "name_cn": "申亚", 'work_app': '', 'work_module': 'MCU', 'work_gl_app': ''},
-            {'name_en': "Rmyh Hong", "name_cn": "洪飞", 'work_app': '', 'work_module': 'BLE', 'work_gl_app': ''},
-            {'name_en': "Frank Sun", "name_cn": "孙旭", 'work_app': '', 'work_module': 'DBG', 'work_gl_app': ''},
-            {'name_en': "Shannon Su", "name_cn": "苏竞成", 'work_app': '', 'work_module': 'UTILS', 'work_gl_app': ''}
-        ]
 
 
-app_team = Team()
+software_develop_team = Team()
 
 
 # get attribute of node,
@@ -245,9 +252,10 @@ def xmlparse_f(file, app_tm):
 
 
 def main():
-    app_team.init_members()
-    xmlparse_f("Code_Review.xml", app_team)
-    app_team.save_as_text("Code_Review.txt")
+    software_develop_team.init_members()
+    # software_develop_team.print_members()
+    xmlparse_f("Code_Review.xml", software_develop_team)
+    software_develop_team.save_as_text("Code_Review.txt")
 
 
 main()
