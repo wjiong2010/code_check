@@ -26,17 +26,6 @@ class CodeReviewResult:
         self.locations = []
 
 
-class Member:
-    def __init__(self):
-        self.name_en = ''
-        self.name_cn = ''
-        self.work_modules = []
-        self.work_apps = []
-        self.work_gl_apps = []
-        self.work_pro_apps = []
-        self.cr_result = []
-
-
 def parse_work(m, node):
     for subNode in node.childNodes:
         if CR_ELEMENT_NODE == subNode.nodeType:
@@ -53,6 +42,16 @@ def parse_work(m, node):
 
 
 class Team:
+    class Member:
+        def __init__(self):
+            self.name_en = ''
+            self.name_cn = ''
+            self.work_modules = []
+            self.work_apps = []
+            self.work_gl_apps = []
+            self.work_pro_apps = []
+            self.cr_result = []
+
     def save_as_text(self, txt):
         summary_in_text = ''
 
@@ -89,6 +88,7 @@ class Team:
         else:
             code_file_path = ''
 
+        is_pro_track = False
         fw_track_tag = "framework\\track\\"
         len_fw_track_tag = len(fw_track_tag)
         print("tag_path: " + code_file_path)
@@ -98,6 +98,7 @@ class Team:
             len_fw_track_tag = len(fw_track_tag)
             print("pro_tag_path: " + code_file_path)
             module_index = code_file_path.find(fw_track_tag)
+            is_pro_track = True
             if module_index == -1:
                 return -1
 
@@ -132,12 +133,18 @@ class Team:
                 if app_name in mb.work_gl_apps:
                     mb.cr_result.append(cr_result)
         elif 'APPS' == module_name[:4]:
-            app_i = module_index + 5  # skip 'apps/'
-            app_name = code_file_path[app_i:app_i + 3].upper()
-            print("app_i: " + str(app_i) + " app_name: " + app_name)
-            for mb in self.members:
-                if app_name in mb.work_apps:
-                    mb.cr_result.append(cr_result)
+            app_i = module_index + 5  # skip 'apps\'
+            app_j = code_file_path[app_i:].find("\\")
+            app_name = code_file_path[app_i:app_i+app_j].upper()
+            print("app_i,j: " + str(app_i) + "," + str(app_j) + " app_name: " + app_name)
+            if is_pro_track:
+                for mb in self.members:
+                    if app_name in mb.work_pro_apps:
+                        mb.cr_result.append(cr_result)
+            else:
+                for mb in self.members:
+                    if app_name in mb.work_apps:
+                        mb.cr_result.append(cr_result)
         else:
             print("module_name: " + module_name)
 
@@ -147,7 +154,7 @@ class Team:
         for subNode in node.childNodes:
             if CR_ELEMENT_NODE == subNode.nodeType:
                 if 'developer' == subNode.nodeName:
-                    m = Member()
+                    m = self.Member()
                     m.name_en = subNode.getAttribute('name_en')
                     m.name_cn = subNode.getAttribute('name_cn')
                     parse_work(m, subNode)
@@ -255,6 +262,7 @@ def main():
     software_develop_team.init_members()
     # software_develop_team.print_members()
     xmlparse_f("Code_Review.xml", software_develop_team)
+    xmlparse_f("Code_Review_pro.xml", software_develop_team)
     software_develop_team.save_as_text("Code_Review.txt")
 
 
